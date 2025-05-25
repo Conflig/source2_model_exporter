@@ -1,7 +1,8 @@
 Source2 Model Exporter
 
-is and simple to use plagin for blender I've create along the development of my map for Couter strike 2
-quick dislamer! AI was use to help me create this plugin. I have limited knowlage of programing and this tool was made to help me but since I have found it really usefull ive decited to makeit aviable to everyone but if you dont like Ai was involved i fully understand 
+It is a simple-to-use plugin for Blender that I created during the development of my map for Counter-Strike 2.
+
+Quick disclaimer! AI was used to help me create this plugin. I have limited knowledge of programming, and this tool was made to assist me. However, since I found it really useful, I decided to make it available to everyone. If you don’t like that AI was involved, I fully understand.
 
 ![image](https://github.com/user-attachments/assets/ff6b0c82-2650-48fc-ab83-fb12c15f584a)
 
@@ -9,19 +10,16 @@ quick dislamer! AI was use to help me create this plugin. I have limited knowlag
 
 ![image](https://github.com/user-attachments/assets/0a244812-b5e2-4a58-b151-d6be895a94f3)
 
-Setup scene will create and empty scene, chenge the Units to Inches and create an cube with dimensions of 64 Inch 
-Also the scene grid will be splitted in to 16 Inch 
+Setup Scene will create an empty scene, change the units to inches, and create a cube with dimensions of 64 inches.
+Additionally, the scene grid will be split into 16-inch sections.
 
 
 
 ![image](https://github.com/user-attachments/assets/d32c794a-c98e-4a8a-b05a-e468f411b79f)
 
-This was main reason this plugin was created. When you created a custom prop for your level select it and click "Create Node" (If you have selected multiple objects they will be part of one prop)
-This will create and new text object with the name of the selected object in red (This will be the name of the exported mesh) 
-All the objects will now be a child of this object and you can move it anywhere in you scene 
-
-The pivot of the Node will be the pivot of the exported object. 
-Pivot is taken from the pivot of the mesh when the Node was created. If you want to adjust where the pivot will be adjust the position of the child objects
+This was the main reason this plugin was created. When you create a custom prop for your level, select it and click 'Create Node.' (If you have selected multiple objects, they will be part of one prop.)
+This will create a new text object with the name of the selected object in red—this will be the name of the exported mesh. All the objects will now be children of this object, allowing you to move them anywhere in your scene.
+The pivot of the Node will be the pivot of the exported object. The pivot is taken from the pivot of the mesh at the time the Node was created. If you want to adjust the pivot position, modify the placement of the child objects.
 
 ![image](https://github.com/user-attachments/assets/6ab519b2-b083-403f-ba5d-dc0553a7ebae)
 
@@ -38,9 +36,9 @@ You dont need to care about scale or export parameters
 
 ![image](https://github.com/user-attachments/assets/6b86fdb6-7822-4fc9-a9b5-933a72392338)
 
-Add material will create new material with basic grid texture. At the same time it also ads custom property with relative path the the material inside the Hammer editor meaning if you export your prop with this material it will use the same material inside the Hammer editor. 
-You can use all materials aviable in the Hammer editor. Note that they will not be visible in Blender since it cannot read the fileformat of the textures. 
+Add Material' will create a new material with a basic grid texture. At the same time, it also adds a custom property with the relative path to the material inside the Hammer editor. This means that if you export your prop with this material, it will use the same material inside the Hammer editor.
 
+You can use all materials available in the Hammer editor. However, note that they will not be visible in Blender, as Blender cannot read the file format of the textures.
 To change the material you just need to copy path of the material inside the hammer Asset browser 
 
 ![image](https://github.com/user-attachments/assets/e4f668b9-992b-423d-9df8-0197d72a7f9a)
@@ -53,10 +51,10 @@ To change the material you just need to copy path of the material inside the ham
 ![image](https://github.com/user-attachments/assets/be6372d7-16f3-451a-acb1-3aab25b369e1)
 ![image](https://github.com/user-attachments/assets/700c3c6c-5313-4573-8690-4cbc6d9a1310)
 
-Since Counter strike 2 you can now use modeling tools directly inside the Hammer editor 
-but if you feel more effecient in Blender you can model all your non-prop geometry in blender and just import it into Hammer (Material linking will be still working even with vertex colors for blended materials)
-Simply select which objects you want export and click the button. 
-Unfortunatelly the is no way of replacing the static geometry in Hammer editor you will need to always manualy delete and then import (would be great it we can find a way of executing this)
+Since Counter-Strike 2, you can now use modeling tools directly inside the Hammer editor.
+However, if you feel more efficient in Blender, you can model all your non-prop geometry there and simply import it into Hammer. Material linking will still work, even with vertex colors for blended materials.
+Just select the objects you want to export and click the button.
+Unfortunately, there is no way to replace static geometry in the Hammer editor—you will always need to manually delete and then import it. It would be great if we could find a way to automate this process.
 
 
 
