@@ -1,0 +1,112 @@
+Source2 Model Exporter
+
+is and simple to use plagin for blender I've create along the development of my map for Couter strike 2
+quick dislamer! AI was use to help me create this plugin. I have limited knowlage of programing and this tool was made to help me but since I have found it really usefull ive decited to makeit aviable to everyone but if you dont like Ai was involved i fully understand 
+
+![image](https://github.com/user-attachments/assets/ff6b0c82-2650-48fc-ab83-fb12c15f584a)
+
+
+
+![image](https://github.com/user-attachments/assets/0a244812-b5e2-4a58-b151-d6be895a94f3)
+
+Setup scene will create and empty scene, chenge the Units to Inches and create an cube with dimensions of 64 Inch 
+Also the scene grid will be splitted in to 16 Inch 
+
+
+
+![image](https://github.com/user-attachments/assets/d32c794a-c98e-4a8a-b05a-e468f411b79f)
+
+This was main reason this plugin was created. When you created a custom prop for your level select it and click "Create Node" (If you have selected multiple objects they will be part of one prop)
+This will create and new text object with the name of the selected object in red (This will be the name of the exported mesh) 
+All the objects will now be a child of this object and you can move it anywhere in you scene 
+
+The pivot of the Node will be the pivot of the exported object. 
+Pivot is taken from the pivot of the mesh when the Node was created. If you want to adjust where the pivot will be adjust the position of the child objects
+
+![image](https://github.com/user-attachments/assets/6ab519b2-b083-403f-ba5d-dc0553a7ebae)
+
+Now you will need to define export path of the Prop. Keep in mind this path need to be INSIDE of the CS2's content folder!
+
+example: F:\Program Files (x86)\Steam\steamapps\common\Counter-Strike Global Offensive\content\csgo_addons\test\models\test_model
+
+Now when the export path is setup the node will turn white and you can now hit EXPORT (see below how to setup new prop inside the Source 2)
+
+You dont need to care about scale or export parameters 
+
+
+
+
+![image](https://github.com/user-attachments/assets/6b86fdb6-7822-4fc9-a9b5-933a72392338)
+
+Add material will create new material with basic grid texture. At the same time it also ads custom property with relative path the the material inside the Hammer editor meaning if you export your prop with this material it will use the same material inside the Hammer editor. 
+You can use all materials aviable in the Hammer editor. Note that they will not be visible in Blender since it cannot read the fileformat of the textures. 
+
+To change the material you just need to copy path of the material inside the hammer Asset browser 
+
+![image](https://github.com/user-attachments/assets/e4f668b9-992b-423d-9df8-0197d72a7f9a)
+
+
+
+
+
+
+![image](https://github.com/user-attachments/assets/be6372d7-16f3-451a-acb1-3aab25b369e1)
+![image](https://github.com/user-attachments/assets/700c3c6c-5313-4573-8690-4cbc6d9a1310)
+
+Since Counter strike 2 you can now use modeling tools directly inside the Hammer editor 
+but if you feel more effecient in Blender you can model all your non-prop geometry in blender and just import it into Hammer (Material linking will be still working even with vertex colors for blended materials)
+Simply select which objects you want export and click the button. 
+Unfortunatelly the is no way of replacing the static geometry in Hammer editor you will need to always manualy delete and then import (would be great it we can find a way of executing this)
+
+
+
+![image](https://github.com/user-attachments/assets/6f177207-e45b-494b-b595-6f22feb3f86f)
+
+Props need collisions! Model a simple collision out of boxes (can be multiple objects but all need to be boxes) Merge all boxes in to one object (CTRL + J)
+Select the collision and then with Shift select the Node of the object we want to have the collison 
+
+![image](https://github.com/user-attachments/assets/b6eff793-f94e-4ccd-9167-405b4aad5dfa)
+
+
+All is now ready and you can hit the export 
+This will create 2 files in the directory 
+
+![image](https://github.com/user-attachments/assets/1b179aa8-85d5-4b57-907c-7c10e728ffc4)
+
+
+How to setup the prop in Hammer?
+
+In the hammer editor acces the ModelDoc
+
+![image](https://github.com/user-attachments/assets/2df7c08c-4837-4000-860f-eb1ca0f70143)
+
+Create a new model by double clicking the "Model"
+
+![image](https://github.com/user-attachments/assets/4587f26f-4a29-47d3-b084-0cbdad1c8a68)
+
+Click the Add button and find "RenderMeshList"
+
+![image](https://github.com/user-attachments/assets/3c7f9b83-3ba8-401c-9f87-3d97cbc567fd)
+
+To add the collisions also click ADD and then look for "PhysicsShapeList"
+
+![image](https://github.com/user-attachments/assets/80d56185-36ff-44e6-99c8-e8742788cbd8)
+
+After just click compile and save the new model 
+You need to do this just to set up the model. Now when you hit "Export model in blender it will automatically update the prop in Hammer
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
