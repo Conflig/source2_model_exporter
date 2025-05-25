@@ -18,7 +18,9 @@ Additionally, the scene grid will be split into 16-inch sections.
 ![image](https://github.com/user-attachments/assets/d32c794a-c98e-4a8a-b05a-e468f411b79f)
 
 This was the main reason this plugin was created. When you create a custom prop for your level, select it and click 'Create Node.' (If you have selected multiple objects, they will be part of one prop.)
-This will create a new text object with the name of the selected object in red—this will be the name of the exported mesh. All the objects will now be children of this object, allowing you to move them anywhere in your scene.
+This will create a new text object with the name of the selected object in red. 
+
+this will be the name of the exported mesh (If you want to rename your prop just enter edit mode and type the new name). All the objects will now be children of this object, allowing you to move them anywhere in your scene.
 The pivot of the Node will be the pivot of the exported object. The pivot is taken from the pivot of the mesh at the time the Node was created. If you want to adjust the pivot position, modify the placement of the child objects.
 
 ![image](https://github.com/user-attachments/assets/6ab519b2-b083-403f-ba5d-dc0553a7ebae)
