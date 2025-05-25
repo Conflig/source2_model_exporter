@@ -102,6 +102,8 @@ You need to do this just to set up the model. Now when you hit "Export model in 
 
 ![image](https://github.com/user-attachments/assets/c3ecdc10-b4f6-4749-a406-5f68c965f579)
 ![image](https://github.com/user-attachments/assets/67d4da6c-c6d0-41b4-be8e-1b5e7e81b8e7)
+![image](https://github.com/user-attachments/assets/cd25cd4e-d774-4a15-817f-5a08c8d0e920)
+
 
 
 
