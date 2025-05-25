@@ -55,7 +55,11 @@ To change the material you just need to copy path of the material inside the ham
 
 Since Counter-Strike 2, you can now use modeling tools directly inside the Hammer editor.
 However, if you feel more efficient in Blender, you can model all your non-prop geometry there and simply import it into Hammer. Material linking will still work, even with vertex colors for blended materials.
-Just select the objects you want to export and click the button.
+
+
+Just select the objects you want to export and click the button. (Export path is defined Add-ons Preferences)
+
+
 Unfortunately, there is no way to replace static geometry in the Hammer editor—you will always need to manually delete and then import it. It would be great if we could find a way to automate this process.
 
 
