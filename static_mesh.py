@@ -1,6 +1,17 @@
 import bpy
 import os
 
+def add_vmat_properties_to_objects(objects):
+    """Add FBX_vmatPath custom property to objects based on their material names"""
+    for obj in objects:
+        if obj.type == 'MESH' and obj.data.materials:
+            # Get the first material (primary material)
+            material = obj.data.materials[0]
+            if material:
+                # Add the custom property with the material name
+                obj["FBX_vmatPath"] = material.name
+                print(f"Added FBX_vmatPath='{material.name}' to object '{obj.name}'")
+
 # Get the addon preferences
 addon_prefs = bpy.context.preferences.addons[__name__.split('.')[0]].preferences
 
@@ -54,6 +65,9 @@ else:
             # Add to temp collection
             temp_collection.objects.link(obj)
 
+        # Add FBX_vmatPath custom properties to all duplicated objects
+        add_vmat_properties_to_objects(temp_collection.objects)
+
         # Add Edge Split modifier to each duplicated object
         for obj in temp_collection.objects:
             if obj.type == 'MESH':
@@ -93,7 +107,7 @@ else:
                 # Updated for Blender 4.4 - mesh_smooth_type might have changed
                 mesh_smooth_type='FACE'
             )
-            print(f"Successfully exported all objects to {file_path}")
+            print(f"Successfully exported all objects to {file_path} with VMAT properties")
             
         except Exception as e:
             print(f"Export failed: {e}")
@@ -106,7 +120,7 @@ else:
                     global_scale=0.393701,
                     use_custom_props=True
                 )
-                print(f"Exported with fallback settings to {file_path}")
+                print(f"Exported with fallback settings to {file_path} with VMAT properties")
             except Exception as e2:
                 print(f"Fallback export also failed: {e2}")
 

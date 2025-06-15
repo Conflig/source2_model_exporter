@@ -9,9 +9,20 @@ class ExportFBXOperator(Operator):
     bl_description = "Export selected models and collision meshes as separate FBX files"
     bl_options = {'REGISTER', 'UNDO'}
 
+    def add_vmat_properties(self, objects):
+        """Add FBX_vmatPath custom property to objects based on their material names"""
+        for obj in objects:
+            if obj.type == 'MESH' and obj.data.materials:
+                # Get the first material (primary material)
+                material = obj.data.materials[0]
+                if material:
+                    # Add the custom property with the material name
+                    obj["FBX_vmatPath"] = material.name
+                    print(f"Added FBX_vmatPath='{material.name}' to object '{obj.name}'")
+
     def execute(self, context):
-        # Get the export scale from the properties
-        export_scale = context.scene.export_fbx.export_scale
+        # Use fixed export scale (previously default value)
+        export_scale = 0.393701
 
         # Check if the 'temp' collection exists, if not create it
         if 'temp' not in bpy.data.collections:
@@ -61,6 +72,9 @@ class ExportFBXOperator(Operator):
                 if obj.type != 'MESH':
                     bpy.context.view_layer.objects.active = obj
                     bpy.ops.object.convert(target='MESH')
+
+            # Add FBX_vmatPath custom properties to all duplicated objects
+            self.add_vmat_properties(temp_collection.objects)
 
             # Deselect everything
             bpy.ops.object.select_all(action='DESELECT')
@@ -170,7 +184,7 @@ class ExportFBXOperator(Operator):
                     
                 exported_count += 1
 
-            self.report({'INFO'}, f"Successfully exported {exported_count} objects")
+            self.report({'INFO'}, f"Successfully exported {exported_count} objects with VMAT properties")
 
         except Exception as e:
             self.report({'ERROR'}, f"Export failed: {str(e)}")

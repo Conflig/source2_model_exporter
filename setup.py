@@ -5,6 +5,23 @@ def get_areas_by_type(context, area_type):
     """Get all areas of a specific type"""
     return [a for a in context.screen.areas if a.type == area_type]
 
+def change_viewport_to_texture():
+    """Change viewport color type to texture view without changing shading mode"""
+    
+    # Get the current 3D viewport
+    for area in bpy.context.screen.areas:
+        if area.type == 'VIEW_3D':
+            for space in area.spaces:
+                if space.type == 'VIEW_3D':
+                    # Only change color type to texture, keep current shading type
+                    space.shading.color_type = 'TEXTURE'
+                    
+                    print(f"Viewport color type changed to TEXTURE (keeping {space.shading.type} shading)")
+                    return True
+    
+    print("No 3D viewport found")
+    return False
+
 # Clear existing objects
 bpy.ops.object.select_all(action='SELECT')
 bpy.ops.object.delete(use_global=False)
@@ -56,35 +73,39 @@ except Exception as e:
     cube.location = (0, 0, size/2)
 
 # Setup viewport overlays and grid
+viewport_configured = False
 try:
-    # Get view3d areas
-    view3d_areas = get_areas_by_type(bpy.context, 'VIEW_3D')
-
-    if view3d_areas:
-        # Get the first view3d area
-        view3d_area = view3d_areas[0]
+    # Set the grid scale to correspond to an inch
+    # This value may need adjustment based on your specific needs
+    if bpy.context.space_data and bpy.context.space_data.type == 'VIEW_3D':
+        # Set grid properties
+        bpy.context.space_data.overlay.grid_scale = 1.33329
+        bpy.context.space_data.overlay.grid_subdivisions = 1
         
-        # The view space
-        view_space = view3d_area.spaces[0]
-
-        # Set the grid scale to correspond to an inch
-        # This value may need adjustment based on your specific needs
-        view_space.overlay.grid_scale = 1.33329
-
-        # Set grid subdivisions
-        view_space.overlay.grid_subdivisions = 1
-
-        # Set the shading type (updated for 4.4)
-        for space in view3d_area.spaces:
-            if space.type == 'VIEW_3D':
-                # Set to material preview for better material display
-                if hasattr(space.shading, 'type'):
-                    space.shading.type = 'MATERIAL_PREVIEW'
-                if hasattr(space.shading, 'color_type'):
-                    space.shading.color_type = 'MATERIAL'
-                
+        # Set the shading type to material preview
+        bpy.context.space_data.shading.type = 'MATERIAL_PREVIEW'
+        
+        # Set color type to TEXTURE - the simple way!
+        bpy.context.space_data.shading.color_type = 'TEXTURE'
+        
+        viewport_configured = True
+        print("Successfully configured viewport via context.space_data")
+    else:
+        print("Current context is not a VIEW_3D space, trying alternative method...")
+        
 except Exception as e:
-    print(f"Warning: Could not fully configure viewport settings: {e}")
+    print(f"Warning: Could not configure viewport via context.space_data: {e}")
+
+# If the primary method didn't work, use the comprehensive viewport function
+if not viewport_configured:
+    print("Attempting viewport configuration via screen areas...")
+    viewport_configured = change_viewport_to_texture()
+
+# Final viewport configuration status
+if viewport_configured:
+    print("Successfully set shading color type to TEXTURE")
+else:
+    print("Warning: Could not fully configure viewport settings")
     print("Grid and shading settings may need manual adjustment")
 
 # Final positioning check
@@ -95,7 +116,7 @@ print("Scene setup completed successfully")
 print(f"- Units set to Imperial (inches)")
 print(f"- Created 64-inch reference cube at origin")
 print(f"- Grid configured for inch measurements")
-print(f"- Viewport configured for material preview")
+print(f"- Viewport configured for material preview with texture color type")
 
 # Deselect the cube
 bpy.ops.object.select_all(action='DESELECT')

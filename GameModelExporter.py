@@ -1,5 +1,3 @@
-
-
 import bpy
 import os
 from bpy.types import PropertyGroup, Panel, Operator
@@ -36,26 +34,6 @@ def update_file_path(self, context):
             # No slots
             self.data.materials.append(mat)
 
-# Update function for material path
-def update_material_path(self, context):
-    """Update the FBX_vmatPath custom property when the UI field changes"""
-    obj = context.object
-    if obj and obj.active_material:
-        obj.active_material["FBX_vmatPath"] = self.material_vmat_path
-
-def get_material_path(self):
-    """Get the current material path from the active material"""
-    obj = bpy.context.object
-    if obj and obj.active_material:
-        return obj.active_material.get("FBX_vmatPath", "")
-    return ""
-
-def set_material_path(self, value):
-    """Set the material path to the active material"""
-    obj = bpy.context.object
-    if obj and obj.active_material:
-        obj.active_material["FBX_vmatPath"] = value
-
 # Add the file path property to the Object class
 bpy.types.Object.my_file_path = bpy.props.StringProperty(
     name="File Path",
@@ -64,16 +42,6 @@ bpy.types.Object.my_file_path = bpy.props.StringProperty(
     maxlen=1024,
     subtype='FILE_PATH',
     update=update_file_path
-)
-
-# Add material path property to Scene for UI purposes
-bpy.types.Scene.material_vmat_path = bpy.props.StringProperty(
-    name="Material Path",
-    description="Path to the .vmat file for the active material",
-    default="",
-    maxlen=1024,
-    get=get_material_path,
-    set=set_material_path
 )
 
 # Custom panel for file path
@@ -90,15 +58,9 @@ class OBJECT_PT_CustomPanel(Panel):
         row = layout.row()
         row.prop(obj, "my_file_path")
 
-# Export FBX Properties
+# Export FBX Properties (keeping for potential future use, but removing export_scale)
 class ExportFBXProperties(PropertyGroup):
-    export_scale: bpy.props.FloatProperty(
-        name="Export Scale",
-        description="Set the export scale",
-        default=0.393701,
-        min=0.01,
-        max=1000.0
-    )
+    pass  # Empty for now, but keeping the structure
 
 # Main panel
 class ExportFBXPanel(Panel):
@@ -126,38 +88,6 @@ class ExportFBXPanel(Panel):
         row = layout.row()
         row.operator("object.adddevmat", icon='MATERIAL')
         
-        # Material Path UI - show when object has active material
-        if obj and obj.active_material:
-            box = layout.box()
-            box.label(text="Material Settings:", icon='MATERIAL_DATA')
-            
-            # Get current material
-            mat = obj.active_material
-            
-            # Show material name
-            row = box.row()
-            row.label(text=f"Material: {mat.name}")
-            
-            # Material path field
-            row = box.row()
-            row.prop(scene, "material_vmat_path", text="VMAT Path")
-            
-            # Show current status
-            current_path = mat.get("FBX_vmatPath", "")
-            if current_path:
-                box.label(text=f"✓ Path: {current_path}", icon='CHECKMARK')
-            else:
-                box.label(text="⚠ No VMAT path set", icon='ERROR')
-        
-        elif obj and not obj.active_material:
-            # Show info when object has no material
-            box = layout.box()
-            box.label(text="No active material - apply Dev Mat first", icon='INFO')
-
-        # Export scale property
-        row = layout.row()
-        layout.prop(scene.export_fbx, "export_scale")
-
         layout.separator()
 
         # Show file path for selected text objects (nodes)
@@ -171,7 +101,7 @@ class ExportFBXPanel(Panel):
             
             # Show current status
             if obj.my_file_path:
-                box.label(text=f"✓ Path set", icon='CHECKMARK')
+                box.label(text="✓ Path set", icon='CHECKMARK')
             else:
                 box.label(text="⚠ No path set", icon='ERROR')
         
@@ -235,7 +165,6 @@ def unregister():
     
     # Remove scene properties
     del bpy.types.Scene.export_fbx
-    del bpy.types.Scene.material_vmat_path
 
 if __name__ == "__main__":
     register()
