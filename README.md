@@ -1,3 +1,6 @@
+** In latest update you DO NOT NEED to manually setup custom property. It will be automatically added on export for both static and props. Just make sure the materials name always match the Hammers asset name**
+
+
 Source2 Model Exporter
 
 It is a simple-to-use plugin for Blender that I created during the development of my map for Counter-Strike 2.
