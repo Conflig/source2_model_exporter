@@ -20,9 +20,36 @@ class ExportFBXOperator(Operator):
                     obj["FBX_vmatPath"] = material.name
                     print(f"Added FBX_vmatPath='{material.name}' to object '{obj.name}'")
 
+    def get_full_export_path(self, original_obj):
+        """Get the full export path by combining Addons Path with relative path"""
+        # Get addon preferences
+        preferences = bpy.context.preferences.addons[__name__.split('.')[0]].preferences
+        base_path = preferences.addons_path
+        
+        if not base_path:
+            return None
+            
+        # Check for relative path first (new system)
+        if hasattr(original_obj, 'relative_export_path') and original_obj.relative_export_path:
+            return os.path.join(base_path, original_obj.relative_export_path)
+        
+        # Fallback to old system for compatibility
+        if "custom_file_path" in original_obj:
+            return original_obj["custom_file_path"]
+            
+        return None
+
     def execute(self, context):
         # Use fixed export scale (previously default value)
         export_scale = 0.393701
+
+        # Get addon preferences for base path
+        preferences = context.preferences.addons[__name__.split('.')[0]].preferences
+        base_path = preferences.addons_path
+        
+        if not base_path:
+            self.report({'ERROR'}, "Addons Path is not set. Please configure it in addon preferences.")
+            return {'CANCELLED'}
 
         # Check if the 'temp' collection exists, if not create it
         if 'temp' not in bpy.data.collections:
@@ -88,26 +115,33 @@ class ExportFBXOperator(Operator):
             # Process each parent object
             exported_count = 0
             for obj in parent_objects:
-                # Get the export path from the custom property of the original object
-                # We need to find the corresponding original object
+                # Find the corresponding original object
                 original_obj = None
                 for orig in original_selection:
                     if orig.name.split('.')[0] == obj.name.split('.')[0]:
                         original_obj = orig
                         break
                 
-                if original_obj is None or "custom_file_path" not in original_obj:
+                if original_obj is None:
+                    self.report({'WARNING'}, f"Could not find original object for {obj.name}")
+                    continue
+                
+                # Get the full export path using the new system
+                output_dir = self.get_full_export_path(original_obj)
+                
+                if not output_dir:
                     self.report({'WARNING'}, f"No export path set for {obj.name}")
                     continue
                     
-                output_dir = original_obj["custom_file_path"]
-                
-                if not output_dir or not os.path.exists(output_dir):
-                    self.report({'WARNING'}, f"Invalid export path for {obj.name}: {output_dir}")
-                    continue
+                if not os.path.exists(output_dir):
+                    try:
+                        os.makedirs(output_dir, exist_ok=True)
+                        print(f"Created directory: {output_dir}")
+                    except Exception as e:
+                        self.report({'WARNING'}, f"Could not create directory {output_dir}: {e}")
+                        continue
 
                 # Get the filename from the original text object's content
-                # This is the key fix - use the text content, not the object name
                 if original_obj.type == 'FONT':
                     base_filename = original_obj.data.body.strip()
                     if not base_filename:
@@ -140,7 +174,7 @@ class ExportFBXOperator(Operator):
                     bpy.ops.object.select_all(action='DESELECT')                    
                     coll_child.select_set(True)
                     bpy.context.view_layer.objects.active = coll_child
-                    filename = base_filename + "_coll.fbx"  # Use base_filename instead of obj.name
+                    filename = base_filename + "_coll.fbx"
                     file_path = os.path.join(output_dir, filename)
                     
                     bpy.ops.export_scene.fbx(
@@ -168,7 +202,7 @@ class ExportFBXOperator(Operator):
                     bpy.ops.object.select_all(action='DESELECT')
                     other_children[0].select_set(True)
                     bpy.context.view_layer.objects.active = other_children[0]
-                    filename = base_filename + ".fbx"  # Use base_filename instead of obj.name
+                    filename = base_filename + ".fbx"
                     file_path = os.path.join(output_dir, filename)
                     
                     bpy.ops.export_scene.fbx(

@@ -7,8 +7,8 @@ A comprehensive addon for exporting models and collision meshes for Source 2 eng
 bl_info = {
     "name": "Source 2 Model Exporter",
     "author": "Jakub Vaja",
-    "version": (1, 0, 0),
-    "blender": (4, 4, 0),
+    "version": (1, 0, 1),
+    "blender": (4, 5, 0),
     "location": "View3D > Sidebar > Source 2 Model Exporter",
     "description": "Exports models and collision meshes for Source 2 engine with proper setup tools",
     "category": "Import-Export",
@@ -48,9 +48,9 @@ def auto_rename_text_object(scene):
 class Source2ExporterPreferences(AddonPreferences):
     bl_idname = __name__
 
-    default_export_path: StringProperty(
-        name="Default Export Path",
-        description="Default path for model exports",
+    addons_path: StringProperty(
+        name="Addons Path",
+        description="Base path for all exports - all export paths will be relative to this location",
         default="",
         maxlen=1024,
         subtype='DIR_PATH'
@@ -67,8 +67,12 @@ class Source2ExporterPreferences(AddonPreferences):
     def draw(self, context):
         layout = self.layout
         
-        # Default export path
-        layout.prop(self, "default_export_path")
+        # Addons path
+        layout.prop(self, "addons_path")
+        if not self.addons_path:
+            box = layout.box()
+            box.label(text="⚠ Please set the Addons Path", icon='ERROR')
+            box.label(text="This will be the base directory for all exports")
         
         # Static mesh export path
         layout.separator()
